@@ -115,8 +115,8 @@ class Hero(pg.sprite.Sprite):
         #check distance to each enemy to see if it is in range
         for enemy in enemy_group:
             if enemy.health > 0:
-                x_dist = enemy.pos[0] - self.rect.x
-                y_dist = enemy.pos[1] - self.rect.y
+                x_dist = enemy.rect.center[0] - self.rect.center[0]
+                y_dist = enemy.rect.center[1] - self.rect.center[1]
                 dist = math.sqrt(x_dist ** 2 + y_dist ** 2)
                 if dist < self.range:
                     self.target = enemy

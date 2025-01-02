@@ -199,7 +199,10 @@ while True:
                         break
         #on space
         if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-            hero.attack(enemy_group)
+            if world.start_wave:
+                hero.attack(enemy_group)
+            elif world.start_inverse:
+                hero.attack(tower_group)
 
         # Cancel everything
         if (

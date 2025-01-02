@@ -11,7 +11,6 @@ class Enemy(pg.sprite.Sprite):
         if roadnr is None:
             roadnr = randint(1,4)
         self.waypoints = waypoints[f'road{roadnr}']
-        self.pos = Vector2(self.waypoints[0])
         self.target_waypoint = 1
         self.props = ENEMY_DATA[enemy_type]
         self.speed = self.props["speed"]
@@ -32,7 +31,7 @@ class Enemy(pg.sprite.Sprite):
         self.original_image = self.animation_listD[self.frame_index]
         self.image = self.original_image #TODO change later when changing orientation??
         self.rect = self.image.get_rect()
-        self.rect.center = self.pos
+        self.rect.center = Vector2(self.waypoints[0])
 
     def update(self, world):
         if self.health <= 0:
@@ -41,13 +40,13 @@ class Enemy(pg.sprite.Sprite):
         self.move(world)
         self.update_img()
         self.play_animation()
-        self.rect.center = self.pos
+        self.rect.center = self.rect.center
 
     def move(self, world):
         #define a target waypoint
         if self.target_waypoint < len(self.waypoints):
             self.target = Vector2(self.waypoints[self.target_waypoint])
-            self.movement = self.target - self.pos
+            self.movement = self.target - self.rect.center
             self.angle = self.movement.as_polar()[1] #angle in degrees wrt positive x-axis (-180 -> 180)
         else:
             #enemy has reached the end of the path
@@ -59,11 +58,11 @@ class Enemy(pg.sprite.Sprite):
         dist = self.movement.length()
         #check if remaining distance is greater than the enemy speed
         if dist >= (self.speed * world.game_speed):
-            self.pos += self.movement.normalize() * (self.speed * world.game_speed)
+            self.rect.center += self.movement.normalize() * (self.speed * world.game_speed)
         else:
             #skip remaining distance to waypoint
             if dist != 0:
-                self.pos += self.movement.normalize() * dist
+                self.rect.center += self.movement.normalize() * dist
             self.target_waypoint += 1
 
     def update_img(self):

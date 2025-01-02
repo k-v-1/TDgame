@@ -31,6 +31,7 @@ class Tower(pg.sprite.Sprite):
 
         #get data from type
         self.properties = TOWER_DATA[type]
+        self.health = 50
 
         #target and bullets
         self.bullet_group = pg.sprite.Group()
@@ -49,6 +50,8 @@ class Tower(pg.sprite.Sprite):
             surface.blit(self.range_image, self.range_rect)
 
     def update(self, enemy_group):
+        if self.health <= 0:
+            self.kill()
         self.target = None
         self.pick_target(enemy_group)
         self.fire()
@@ -60,8 +63,8 @@ class Tower(pg.sprite.Sprite):
         #check distance to each enemy to see if it is in range
         for enemy in enemy_group:
             if enemy.health > 0:
-                x_dist = enemy.pos[0] - self.x
-                y_dist = enemy.pos[1] - self.y
+                x_dist = enemy.rect.center[0] - self.x
+                y_dist = enemy.rect.center[1] - self.y
                 dist = math.sqrt(x_dist ** 2 + y_dist ** 2)
                 if dist < self.range:
                     self.target = enemy
@@ -99,16 +102,16 @@ class Bullet(pg.sprite.Sprite):
 
         #target setup
         self.target = target
-        x_dist = self.target.pos[0] - self.rect.center[0]
-        y_dist = self.target.pos[1] - self.rect.center[1]
+        x_dist = self.target.rect.center[0] - self.rect.center[0]
+        y_dist = self.target.rect.center[1] - self.rect.center[1]
         self.direction = math.degrees(math.atan2(-y_dist, x_dist))
         self.move_vec = pg.math.Vector2()
         self.move_vec.from_polar((self.speed, -self.direction)) #speed, angle in degrees
 
     def move(self, enemy_group):
         if self.follow and self.target in enemy_group:
-            x_dist = self.target.pos[0] - self.rect.center[0]
-            y_dist = self.target.pos[1] - self.rect.center[1]
+            x_dist = self.target.rect.center[0] - self.rect.center[0]
+            y_dist = self.target.rect.center[1] - self.rect.center[1]
             self.direction = math.degrees(math.atan2(-y_dist, x_dist))
             self.move_vec.from_polar((self.speed, -self.direction)) #speed, angle in degrees
 
