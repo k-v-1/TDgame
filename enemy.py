@@ -6,9 +6,11 @@ from constants import *
 from hero import load_images
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, enemy_type, waypoints: list):
+    def __init__(self, enemy_type, waypoints: list, roadnr=None):
         super().__init__()
-        self.waypoints = waypoints[randint(0,3)]
+        if roadnr is None:
+            roadnr = randint(1,4)
+        self.waypoints = waypoints[f'road{roadnr}']
         self.pos = Vector2(self.waypoints[0])
         self.target_waypoint = 1
         self.props = ENEMY_DATA[enemy_type]

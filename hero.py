@@ -55,18 +55,18 @@ class Hero(pg.sprite.Sprite):
     def move(self):
         pressed_keys = pg.key.get_pressed()
         direction = ''
-        if any([pressed_keys[k] for k in [K_UP, K_DOWN, K_LEFT, K_RIGHT]]):
+        if any([pressed_keys[k] for k in [K_UP, K_DOWN, K_LEFT, K_RIGHT, K_w, K_a, K_s, K_d]]):
             #move + save direction
-            if self.rect.top > 0 and pressed_keys[K_UP]:
+            if self.rect.top > 0 and (pressed_keys[K_UP] or pressed_keys[K_w]):
                     self.rect.move_ip(0, -5)
                     direction += 'U'
-            elif self.rect.bottom < SCREEN_HEIGHT and pressed_keys[K_DOWN]:
+            elif self.rect.bottom < SCREEN_HEIGHT and (pressed_keys[K_DOWN] or pressed_keys[K_s]):
                     self.rect.move_ip(0,5)
                     direction += 'D'
-            if self.rect.left > 0 and pressed_keys[K_LEFT]:
+            if self.rect.left > 0 and (pressed_keys[K_LEFT] or pressed_keys[K_a]):
                     self.rect.move_ip(-5, 0)
                     direction += 'L'
-            elif self.rect.right < GAME_WIDTH and pressed_keys[K_RIGHT]:
+            elif self.rect.right < GAME_WIDTH and (pressed_keys[K_RIGHT] or pressed_keys[K_d]):
                     self.rect.move_ip(5, 0)
                     direction += 'R'
         #update or keep old direction
