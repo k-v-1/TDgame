@@ -133,7 +133,9 @@ while True:
         if world.killed_enemies + world.missed_enemies == len(world.enemy_list):
             world.reset_level()
             world.start_inverse = True
+
     elif world.start_inverse:
+        enemy_group.add(hero)
         if pg.time.get_ticks() - last_enemy_spawn > SPAWN_COOLDOWN:
             if world.spawned_enemies < len(world.enemy_list):
                 for roadnr, spawn_button in enumerate(spawn_btns):
@@ -144,6 +146,7 @@ while True:
                         world.spawned_enemies += 1
                         last_enemy_spawn = pg.time.get_ticks()
         if world.killed_enemies + world.missed_enemies == len(world.enemy_list):
+            enemy_group.remove(hero)
             world.level += 1
             world.reset_level()
             world.start_inverse = False
@@ -171,8 +174,9 @@ while True:
                 world.placing_towers = False
 
     #update and draw Hero, enemies and towers
-    hero.update()
-    hero.draw(screen)
+    if not world.start_inverse:
+        hero.update()
+        hero.draw(screen)
     enemy_group.update(world)
     enemy_group.draw(screen)
     for tower in tower_group:

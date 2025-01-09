@@ -44,9 +44,13 @@ class Hero(pg.sprite.Sprite):
         self.last_attack = pg.time.get_ticks()
         self.target = None
         self.damage = 20
+        
+        self.health = 100
 
 
-    def update(self):
+    def update(self, world=None): #extra dummy argument for updating with enemy_group
+        if self.health <= 0:
+             self.kill()
         self.move()
         self.play_animation()
         if self.glow_index != -1:
